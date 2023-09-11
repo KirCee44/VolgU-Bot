@@ -1,14 +1,16 @@
 import sqlite3
 
+#Подключение к базе данных
 db = sqlite3.connect('user.db')
 cursor = db.cursor()
 
-cursor.execute("""CREATE TABLE IF NOT EXIST users(
+#Создание базы данных
+cursor.execute("""CREATE TABLE IF NOT EXISTS users(
     user TEXT,
     id INTAGER,
-    group TEXT,
+    group_name TEXT,
     password TEXT,
-    email TEXT,)
+    email TEXT);
 """)
 
 db.commit()
