@@ -1,4 +1,6 @@
 import sqlite3
+
+#Функция проверки регистрации
 def chack_registration(id):
     check = False
     connect = sqlite3.connect('user.db')
@@ -8,3 +10,4 @@ def chack_registration(id):
         check = True
     connect.commit()
     return check
+
