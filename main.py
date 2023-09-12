@@ -13,7 +13,7 @@ bot = telebot.TeleBot(token)
 def start(message):
     global check_registration
     info_registration = 'Вы зарегистрированны'
-    keyboard = types.ReplyKeyboardMarkup()
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     couples = types.KeyboardButton('Рассписание пар')
     time = types.KeyboardButton('Рассписание пар по времени')
     profile = types.KeyboardButton('Профиль')
