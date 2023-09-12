@@ -7,7 +7,8 @@ def chack_registration(id):
     cursor = connect.cursor()
     id_user = cursor.execute("SELECT id FROM users")
     id_user = id_user.fetchall()
-    id_user = id_user[0]
+    if id_user:
+        id_user = id_user[0]
     if id in id_user:
         check = True
     connect.commit()
