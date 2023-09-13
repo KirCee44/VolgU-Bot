@@ -1,8 +1,9 @@
 import telebot
 from telebot import types
-from config import token
+from config import token, media
 import registration.registration as registration
 import database.database as database
+
 
 token = token.token
 
@@ -46,10 +47,10 @@ def registration_in_bot(message):
 @bot.callback_query_handler(func=lambda call: True)
 def input_user_information(call):
     if call.data == 'registration':
-        bot.send_message(call.message.chat.id, 'Введите данный о себе по примеру: /reg название и номер группы, пароль от личного кабинета и электронную почту на которую зерегистрирован личный кабинет(Например: /reg САк-212 *пароль* SAk-212_#########@volsu.ru) (данные от личного кабинета не обязательные, если вы не хотите вводить данные о личном кабинете, то вместо них впешите нули)')
+        bot.send_message(call.message.chat.id, 'Введите данный о себе по примеру: /reg название и номер группы, пароль от личного кабинета и электронную почту на которую зерегистрирован личный кабинет(Например: /reg САк-212 *пароль* SAk-212_123456789@volsu.ru) (данные от личного кабинета не обязательны, если вы не хотите их вводить, то вместо этого введите нули)')
     
 @bot.message_handler(content_types=['text'])
-def profile(message):
+def handler_imput_text(message):
     if message.text == 'Профиль':
         message_keyboard = types.InlineKeyboardMarkup()
         registration_button = types.InlineKeyboardButton('Зарегистрироваться', callback_data='registration')
@@ -61,6 +62,8 @@ def profile(message):
             status = 'вы зарегистрированны'
         else:
             message_keyboard.add(registration_button)
-        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)     
-
+        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)
+    elif message.text == 'Рассписание пар по времени':
+        bot.send_photo(message.chat.id, media.pairing_schedule, caption="Расписание пар по времени")
+        
 bot.infinity_polling()
