@@ -1,0 +1,1 @@
+pairing_schedule = open('media\pairing_schedule.jpg', "rb")
