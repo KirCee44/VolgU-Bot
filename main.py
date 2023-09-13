@@ -64,6 +64,6 @@ def handler_imput_text(message):
             message_keyboard.add(registration_button)
         bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)
     elif message.text == 'Рассписание пар по времени':
-        bot.send_photo(message.chat.id, media.pairing_schedule, caption="Расписание пар по времени")
+        bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="Расписание пар по времени")
         
 bot.infinity_polling()
