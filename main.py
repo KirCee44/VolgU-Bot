@@ -46,7 +46,7 @@ def registration_in_bot(message):
 @bot.callback_query_handler(func=lambda call: True)
 def input_user_information(call):
     if call.data == 'registration':
-        bot.send_message(call.message.chat.id, 'Введите данный о себе по примеру: /reg название_и_номер_групп пароль_от_личного_кабинета электронную_почту_на_которую_зерегистрирован_личный_кабинет (данные от личного кабинета не обязательные, если вы не хотите вводить данные о личном кабинете, то вместо них впешите нули)')
+        bot.send_message(call.message.chat.id, 'Введите данный о себе по примеру: /reg название и номер группы, пароль от личного кабинета и электронную почту на которую зерегистрирован личный кабинет(Например: /reg САк-212 *пароль* SAk-212_#########@volsu.ru) (данные от личного кабинета не обязательные, если вы не хотите вводить данные о личном кабинете, то вместо них впешите нули)')
     
 @bot.message_handler(content_types=['text'])
 def profile(message):
@@ -61,6 +61,6 @@ def profile(message):
             status = 'вы зарегистрированны'
         else:
             message_keyboard.add(registration_button)
-        bot.send_message(message.chat.id, f"""<b>├ID:</b> {user_id}\n<b>├Имя:</b> {name}\n<b>├Группа:</b> {group_name}\n<b>├Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)     
+        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)     
 
 bot.infinity_polling()
