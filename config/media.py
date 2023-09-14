@@ -1,1 +1,2 @@
 pairing_schedule = 'media\pairing_schedule.jpg'
+schedule_on_day = [['media\Sak\group_212\week_0\Monday.png', 'media\Sak\group_212\week_0\Vtornik.png', 'media\Sak\group_212\week_0\Sreda.png', 'media\Sak\group_212\week_0\Chetverg.png','media\Sak\group_212\week_0\Friday.png',  'media\Sak\group_212\week_0\Sybbota.png'], ['media\Sak\group_212\week_0\Monday.png', 'media\Sak\group_212\week_0\Vtornik.png', 'media\Sak\group_212\week_0\Sreda.png', 'media\Sak\group_212\week_0\Chetverg.png','media\Sak\group_212\week_0\Friday.png',  'media\Sak\group_212\week_0\Sybbota.png']]
