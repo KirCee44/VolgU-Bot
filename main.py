@@ -57,11 +57,12 @@ def handler_imput_text(message):
         status = 'вы не зарегистрированны'
         user_id = message.from_user.id
         name = message.from_user.first_name
-        group_name = '*'
         if registration.chack_registration(user_id):
             status = 'вы зарегистрированны'
+            group_name = registration.information_user(user_id)
         else:
             message_keyboard.add(registration_button)
+            group_name = '*'
         bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)
     elif message.text == 'Рассписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="Расписание пар по времени")

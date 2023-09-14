@@ -28,3 +28,12 @@ class Registration:
         cursor.execute("INSERT INTO users (user, id, group_name, password, email) VALUES (?, ?, ?, ?, ?);", (self.name, self.id, self.name_group, self.password, self.email))
         cursor.close()
         connect.commit()
+        
+def information_user(id):
+    connect = sqlite3.connect('user.db')
+    cursor = connect.cursor()
+    information = cursor.execute("SELECT group_name FROM users WHERE id = ?", (id,))
+    information = information.fetchall()[0][0]
+    cursor.close()
+    connect.commit()
+    return information
