@@ -48,7 +48,7 @@ def registration_in_bot(message):
     user_input_cache = message.text.split()
     user_information = {
         'user_id': message.from_user.id,
-        'user_name': message.from_user.first_name[0],
+        'user_name': message.from_user.first_name,
         'group_name': user_input_cache[1],
         'password': user_input_cache[2],
         'email': user_input_cache[-1],
@@ -81,7 +81,7 @@ def handler_imput_text(message):
         else:
             message_keyboard.add(registration_button)
             group_name = '*'
-        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html')
+        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)
     elif message.text == 'Рассписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="Расписание пар по времени")
     elif message.text == 'Рассписание пар':
