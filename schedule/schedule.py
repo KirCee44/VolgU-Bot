@@ -14,7 +14,7 @@ def geniration_schedule_image(url_image, url_save, week_day, url_scedule_text):
     text = create_schedule_day(week_day, url_scedule_text)
     image = Image.open(url_image)
     image_drow = ImageDraw.Draw(image)
-    font = ImageFont.truetype("calibri.ttf", 30, encoding='UTF-8')
+    font = ImageFont.truetype("calibri.ttf", 40, encoding='UTF-8')
     image_drow.text((90,140), text, font=font, fill="black", align="left")
     image.save(url_save)
     return url_save
