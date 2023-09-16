@@ -11,7 +11,7 @@ def chack_registration(id):
     if str(id) in id_user:
         check = True
     connect.commit()
-    return check, id_user
+    return check
 
 class Registration:
     def __init__(self, id, name: str, name_group: str, password: str, email: str) -> None:
