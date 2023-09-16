@@ -5,14 +5,13 @@ def chack_registration(id):
     check = False
     connect = sqlite3.connect('user.db')
     cursor = connect.cursor()
-    id_user = cursor.execute("SELECT id FROM users")
+    id_user = cursor.execute("SELECT id FROM users;")
     id_user = id_user.fetchall()
-    if id_user:
-        id_user = id_user[0]
-    if id in id_user:
+    id_user=' '.join(map(str, id_user))
+    if str(id) in id_user:
         check = True
     connect.commit()
-    return check
+    return check, id_user
 
 class Registration:
     def __init__(self, id, name: str, name_group: str, password: str, email: str) -> None:
