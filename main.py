@@ -1,10 +1,12 @@
 import telebot
 from telebot import types
-from config import token, media
+from config import token, link_generation
 import registration.registration as registration
 import database.database as database
 import datetime
-
+from config import media
+from schedule import schedule, numerator_denominator
+import math
 
 token = token.token
 
@@ -12,9 +14,12 @@ check_registration = False
 
 keydoard_choise_day_in_week = types.InlineKeyboardMarkup()
 choise_day_in_week_button = [types.InlineKeyboardButton("Понедельник", callback_data='0'), types.InlineKeyboardButton("Вторник", callback_data='1'), types.InlineKeyboardButton("Среда", callback_data='2'), types.InlineKeyboardButton("Четверг", callback_data='3'), types.InlineKeyboardButton("Пятница", callback_data='4'), types.InlineKeyboardButton("Суббота", callback_data='5')]
-keydoard_choise_day_in_week.add(choise_day_in_week_button[0], choise_day_in_week_button[1], choise_day_in_week_button[2], choise_day_in_week_button[3], choise_day_in_week_button[4], choise_day_in_week_button[5])
+keydoard_choise_day_in_week.row(choise_day_in_week_button[0], choise_day_in_week_button[1], choise_day_in_week_button[2])
+keydoard_choise_day_in_week.row(choise_day_in_week_button[3], choise_day_in_week_button[4], choise_day_in_week_button[5])
 
-week_day = ['понедельник','вторник','среду','четверг','пятницу','субботу', 'воскресенье']
+week_day = ['понедельник','вторник','среда','четверг','пятница','субботу', 'воскресенье']
+numerator_and_denominator_text = ['числитель', 'знаменатель']
+numerator_and_denominator = numerator_denominator.numerator_denominator()
 date = datetime.date.today() 
 
 bot = telebot.TeleBot(token)
@@ -57,19 +62,10 @@ def input_user_information(call):
     number_day = date.weekday()
     if call.data == 'registration':
         bot.send_message(call.message.chat.id, 'Введите данный о себе по примеру: /reg название и номер группы, пароль от личного кабинета и электронную почту на которую зерегистрирован личный кабинет(Например: /reg САк-212 *пароль* SAk-212_123456789@volsu.ru) (данные от личного кабинета не обязательны, если вы не хотите их вводить, то вместо этого введите нули)')
-    elif call.data == '0':
-        number_day = 0
-    elif call.data == '1':
-        number_day = 1
-    elif call.data == '2':
-        number_day = 2
-    elif call.data == '3':
-        number_day = 3
-    elif call.data == '4':
-        number_day = 4
-    elif call.data == '5':
-        number_day = 5
-    bot.edit_message_media(media = telebot.types.InputMedia(type = 'photo', media = open(media.schedule_on_day[0][number_day], 'rb')), chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keydoard_choise_day_in_week)		
+    number_day = int(call.data)
+    save_url = link_generation.link_generation(media.media, registration.information_user(call.message.chat.id), f'week_{numerator_and_denominator}\image.jpg')
+    bot.delete_message(call.message.chat.id, call.message.message_id)
+    bot.send_photo(call.message.chat.id, open(schedule.geniration_schedule_image(media.schedule_template, save_url, number_day, f'{media.media}\{registration.information_user(call.message.chat.id)}\week_{numerator_and_denominator}\week.txt'), 'rb'), caption=f"<b>День недели:</b> {week_day[number_day]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(call.message.chat.id)}", reply_markup=keydoard_choise_day_in_week, parse_mode="html")
 
 @bot.message_handler(content_types=['text'])
 def handler_imput_text(message):
@@ -85,10 +81,11 @@ def handler_imput_text(message):
         else:
             message_keyboard.add(registration_button)
             group_name = '*'
-        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html', reply_markup=message_keyboard)
+        bot.send_message(message.chat.id, f"""<b>├ ID:</b> {user_id}\n<b>├ Имя:</b> {name}\n<b>├ Группа:</b> {group_name}\n<b>├ Статус:</b> {status}""", parse_mode='html')
     elif message.text == 'Рассписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="Расписание пар по времени")
     elif message.text == 'Рассписание пар':
-        bot.send_photo(message.chat.id, open(media.schedule_on_day[0][date.weekday()], 'rb'), caption=f"Расписание пар на {week_day[date.weekday()]}", reply_markup=keydoard_choise_day_in_week)
-        
+        save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), f'week_{numerator_and_denominator}\image.jpg')
+        bot.send_photo(message.chat.id, open(schedule.geniration_schedule_image(media.schedule_template, save_url, date.weekday(), f'{media.media}\{registration.information_user(message.from_user.id)}\week_{numerator_and_denominator}\week.txt'), 'rb'), caption=f"<b>День недели:</b> {week_day[date.weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}", reply_markup=keydoard_choise_day_in_week, parse_mode="html")
+
 bot.infinity_polling()
