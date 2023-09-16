@@ -36,4 +36,4 @@ def information_user(id):
     information = information.fetchall()[0][0]
     cursor.close()
     connect.commit()
-    return information
+    return information.lower()
