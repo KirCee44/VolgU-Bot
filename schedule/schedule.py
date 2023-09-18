@@ -1,6 +1,6 @@
 from PIL import ImageFont, Image, ImageDraw
 
-week_days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота', 'Воскресенье']
+week_days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота', 'Воскресенье', '']
 
 def create_schedule_day(week_day, url):
     file = open(url, 'r', encoding="UTF-8")

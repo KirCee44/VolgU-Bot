@@ -125,7 +125,6 @@ def handler_imput_text(message):
     #Выводит расписание по времени
     elif message.text == 'Расписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="<b>Расписание пар по времени</b>", parse_mode='html')
-        print(media.pairing_schedule, 'rb')
         
     #Выводит сгенирированное расписание пар
     elif message.text == 'Расписание пар':
