@@ -38,7 +38,7 @@ bot = telebot.TeleBot(token)
 def start(message):
     global check_registration
     info_registration = 'Вы зарегистрированны'
-    
+
     #Создание экранной клавиатуры
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     couples = types.KeyboardButton('Расписание пар')
@@ -48,14 +48,14 @@ def start(message):
     keyboard.row(couples)
     keyboard.row(time, information)
     keyboard.row(profile)
-    
+
     if registration.chack_registration(message.from_user.id):
         check_registration = True
     if check_registration == False:
         info_registration = 'Вы не зарегистрированны'
-     
+
     bot.send_message(message.chat.id, f'Добрый день, {message.from_user.first_name}. {info_registration}', reply_markup=keyboard)
-    
+
 #Обработчик команды /reg
 @bot.message_handler(commands=['reg'])
 def registration_in_bot(message):
@@ -67,7 +67,7 @@ def registration_in_bot(message):
         'password': user_input_cache[2],
         'email': user_input_cache[-1],
     }
-    
+
     #Выполнение функции регистрации
     registration_output = registration.Registration(
         user_information['user_id'],
@@ -83,18 +83,18 @@ def registration_in_bot(message):
 @bot.callback_query_handler(func=lambda call: True)
 def input_user_information(call):
     number_day = date.weekday()
-    
+
     #Выводит подсказку к регистрации при нажатии на кнопку "Зарегистрироваться"
     if call.data == 'registration':
         bot.send_message(call.message.chat.id, "Введите данный о себе по примеру: /reg САк-212 *пароль* SAk-212_123456789@volsu.ru)\n(данные от личного кабинета не обязательны, если вы не хотите их вводить, то вместо этого введите нули)")
-    
+
     #Обновление сообщения расписания
     number_day = int(call.data)
     save_url = link_generation.link_generation(media.media, registration.information_user(call.message.chat.id), f'week_{numerator_and_denominator}\image.jpg')
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_photo(
         chat_id= call.message.chat.id,
-        photo= open(schedule.geniration_schedule_image(media.schedule_template, save_url, number_day, f'{media.media}\{registration.information_user(call.message.chat.id)}\week_{numerator_and_denominator}\week.txt'), 'rb'),
+        photo= open(schedule.geniration_schedule_image(media.schedule_template, save_url, number_day, f'{media.media}/{registration.information_user(call.message.chat.id)}/week_{numerator_and_denominator}/week.txt'), 'rb'),
         caption= f"<b>День недели:</b> {week_day[number_day]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(call.message.chat.id)}",
         reply_markup= keydoard_choise_day_in_week, parse_mode= "html"
     )
@@ -112,24 +112,23 @@ def handler_imput_text(message):
             'name':message.from_user.first_name,
             'group_name':'*'
         }
-        
+
         if registration.chack_registration(int(user_information_profile['user_id'])) == True:
             user_information_profile['status'] = 'вы зарегистрированны'
             user_information_profile['group_name'] = registration.information_user(user_information_profile['user_id'])
         elif registration.chack_registration(int(user_information_profile['user_id'])) == False:
             message_keyboard.add(registration_button)
             user_information_profile['group_name'] = '*'
-        
+
         bot.send_message(message.chat.id,f"<b>├ ID:</b> {user_information_profile['user_id']}\n<b>├ Имя:</b> {user_information_profile['name']}\n<b>├ Группа:</b> {user_information_profile['group_name']}\n<b>├ Статус:</b> {user_information_profile['status']}",reply_markup=message_keyboard, parse_mode='html')
-        
+
     #Выводит расписание по времени
     elif message.text == 'Расписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="<b>Расписание пар по времени</b>", parse_mode='html')
-        print(media.pairing_schedule, 'rb')
-        
+
     #Выводит сгенирированное расписание пар
     elif message.text == 'Расписание пар':
-        save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), f'week_{numerator_and_denominator}\image.jpg')
-        bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, date.weekday(), f'{media.media}\{registration.information_user(message.from_user.id)}\week_{numerator_and_denominator}\week.txt'), 'rb'),caption=f"<b>День недели:</b> {week_day[date.weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
+        save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), f'week_{numerator_and_denominator}/image.jpg')
+        bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, date.weekday(), f'{media.media}/{registration.information_user(message.from_user.id)}/week_{numerator_and_denominator}/week.txt'), 'rb'),caption=f"<b>День недели:</b> {week_day[date.weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
 
 bot.infinity_polling()
