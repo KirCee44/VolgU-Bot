@@ -1,5 +1,7 @@
 import sqlite3
 
+names_group = ['сак-212']
+
 #Функция проверки регистрации
 def chack_registration(id):
     check = False
@@ -20,7 +22,14 @@ class Registration:
         self.name_group = name_group
         self.password = password
         self.email = email
-        
+    
+    def is_valid(self):
+        check_valid = False
+        if self.name_group.lower() in names_group:
+            check_valid = True
+        return check_valid
+            
+    
     def registration(self):
         connect = sqlite3.connect('user.db')
         cursor = connect.cursor()

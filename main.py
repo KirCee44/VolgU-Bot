@@ -76,8 +76,11 @@ def registration_in_bot(message):
         user_information['password'],
         user_information['email']
         )
-    registration_output.registration()
-    bot.send_message(message.chat.id, 'Вы зарегистрированны')
+    if registration_output.is_valid():
+        registration_output.registration()
+        bot.send_message(message.chat.id, 'Вы зарегистрированны')
+    else:
+        bot.send_message(message.chat.id, 'Вы ввели не существующую группу')
 
 #Обработчик кнопок
 @bot.callback_query_handler(func=lambda call: True)
@@ -125,11 +128,14 @@ def handler_imput_text(message):
     #Выводит расписание по времени
     elif message.text == 'Расписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="<b>Расписание пар по времени</b>", parse_mode='html')
-        print(media.pairing_schedule, 'rb')
         
     #Выводит сгенирированное расписание пар
-    elif message.text == 'Расписание пар':
-        save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), f'week_{numerator_and_denominator}/image.jpg')
-        bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, date.weekday(), f'{media.media}/{registration.information_user(message.from_user.id)}/week_{numerator_and_denominator}/week.txt'), 'rb'),caption=f"<b>День недели:</b> {week_day[date.weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
-
+    if registration.chack_registration(message.from_user.id) == True:
+        if message.text == 'Расписание пар':
+            save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), f'week_{numerator_and_denominator}/image.jpg')
+            bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, date.weekday(), f'{media.media}/{registration.information_user(message.from_user.id)}/week_{numerator_and_denominator}/week.txt'), 'rb'),caption=f"<b>День недели:</b> {week_day[date.weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
+    else:
+        if message.text == 'Расписание пар':
+            bot.send_message(message.chat.id, 'Вы не зарегистрированны')
+    
 bot.infinity_polling()
