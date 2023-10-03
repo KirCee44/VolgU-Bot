@@ -125,7 +125,7 @@ def handler_imput_text(message):
     #Выводит расписание по времени
     elif message.text == 'Расписание пар по времени':
         bot.send_photo(message.chat.id, open(media.pairing_schedule, 'rb'), caption="<b>Расписание пар по времени</b>", parse_mode='html')
-        
+
     #Выводит сгенирированное расписание пар
     if registration.chack_registration(message.from_user.id) == True:
         if message.text == 'Расписание пар':
@@ -134,5 +134,5 @@ def handler_imput_text(message):
     else:
         if message.text == 'Расписание пар':
             bot.send_message(message.chat.id, 'Вы не зарегистрированны')
-    
+
 bot.infinity_polling()
