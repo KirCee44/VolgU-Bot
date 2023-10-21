@@ -45,6 +45,7 @@ def geniration_schedule_image(url_image, url_save, week_day, url_scedule_text, n
                 count_text_max_width -= 1
         else:
             text_list.append('\n')
+            text_list.append(t)
             count_text_max_width = 0
     text = ''.join(text_list)
     image_drow.text((x,y), text, fill="black", align="left", font=font)
