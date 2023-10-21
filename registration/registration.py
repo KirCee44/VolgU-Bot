@@ -1,6 +1,6 @@
 import sqlite3
 
-names_group = ['сак-212']
+names_group = ['сак-212', 'сак-211']
 
 #Функция проверки регистрации
 def chack_registration(id):

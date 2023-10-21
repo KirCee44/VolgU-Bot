@@ -94,7 +94,7 @@ def input_user_information(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_photo(
         chat_id= call.message.chat.id,
-        photo= open(schedule.geniration_schedule_image(media.schedule_template, save_url, number_day, f'{media.media}/{registration.information_user(call.message.chat.id)}/САкф-212.xlsx', numerator_and_denominator), 'rb'),
+        photo= open(schedule.geniration_schedule_image(media.schedule_template, save_url, number_day, f'{media.media}/{registration.information_user(call.message.chat.id)}/{registration.information_user(call.message.chat.id)}.xlsx', numerator_and_denominator), 'rb'),
         caption= f"<b>День недели:</b> {week_day[number_day]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(call.message.chat.id)}",
         reply_markup= keydoard_choise_day_in_week, parse_mode= "html"
     )
@@ -130,7 +130,7 @@ def handler_imput_text(message):
     if registration.chack_registration(message.from_user.id) == True:
         if message.text == 'Расписание пар':
             save_url = link_generation.link_generation(media.media, registration.information_user(message.from_user.id), 'image.jpg')
-            bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, datetime.date.today().weekday(), f'{media.media}/{registration.information_user(message.from_user.id)}/САкф-212.xlsx', numerator_and_denominator), 'rb'),caption=f"<b>День недели:</b> {week_day[datetime.date.today().weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
+            bot.send_photo(message.chat.id,open(schedule.geniration_schedule_image(media.schedule_template, save_url, datetime.date.today().weekday(), f'{media.media}/{registration.information_user(message.from_user.id)}/{registration.information_user(message.from_user.id)}.xlsx', numerator_and_denominator), 'rb'),caption=f"<b>День недели:</b> {week_day[datetime.date.today().weekday()]}\n<b>Неделя:</b> {numerator_and_denominator_text[numerator_and_denominator]}\n<b>Группа:</b> {registration.information_user(message.from_user.id)}",reply_markup=keydoard_choise_day_in_week, parse_mode="html")
     else:
         if message.text == 'Расписание пар':
             bot.send_message(message.chat.id, 'Вы не зарегистрированны')
